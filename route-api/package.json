@@ -1,0 +1,14 @@
+{
+  "name": "travel-miniser",
+  "version": "1.0.0",
+  "description": "HACKUDC 2024",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-geocoder": "^4.3.0"
+  }
+}
