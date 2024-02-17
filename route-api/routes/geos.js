@@ -2,8 +2,6 @@ const nodeGeocoder = require('node-geocoder')
 const geolib = require('geolib')
 const amadeusAPI = require('amadeus');
 const { quickSort, ArraytoJSON, JSONtoArray } = require('./utils');
-const { json } = require('body-parser');
-const { docs } = require('googleapis/build/src/apis/docs');
 
 var geocoder = nodeGeocoder({provider: 'openstreetmap'})
 var amadeus = new amadeusAPI({
