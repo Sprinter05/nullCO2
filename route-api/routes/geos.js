@@ -7,7 +7,7 @@ const { amadeus_config } = require('../config.json')
 const errJSON = { // Error message for requests
     "error": "Request could not be fulfilled!",
     "pleaseCheck": "That your fields and parameters are correct!",
-    "travel-minimiser-api": "Made by Sprinter05"
+    "nullCO2": "api_error"
 }
 
 // Geocoder API login from config.json
