@@ -1,2 +1,3 @@
+# API .gitignore
 route-api/node_modules
-dijkstra
+route-api/config.json
