@@ -1,17 +1,18 @@
 from pprint import pprint
 import requests
 
-proxies = {
-    "http": "http://localhost:8080",
-}
+# For debugging purposes
+# proxies = {
+#     "http": "http://localhost:8080",
+# }
 
 
-def get_location(loc: str):  # Get the coordinates of a location string
+def get_location(loc: str):  # Get the coordinates from a user-provided location
     a = requests.get(
         "http://127.0.0.1:3000/get_place",
         params={"name": loc},
         timeout=100,
-        proxies=proxies,
+        # proxies=proxies,
     )
     return a.json()
 
@@ -40,7 +41,7 @@ def get_airports(locations):  # Get the nearest airports to a list of coordinate
         f"http://127.0.0.1:3000/get_airport/{len(locations)}",
         params=locs,
         timeout=100,
-        proxies=proxies,
+        # proxies=proxies,
     )
     return a.json()
 
@@ -57,7 +58,9 @@ def get_route(
     return matrix
 
 
-def get_flight(origin_airport, destination_airport, date): # Get list of flights between two airports
+def get_flight(
+    origin_airport, destination_airport, date
+):  # Get list of flights between two airports
     a = requests.get(
         "http://127.0.0.1:3000/get_flight",
         params={
