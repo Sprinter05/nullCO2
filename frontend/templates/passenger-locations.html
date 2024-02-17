@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Location Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+
+        .passenger-form {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+        }
+
+        .passenger-name {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .location-input {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .submit-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Passenger Location Form</h1>
+
+        <form action="/calculate_route" method="POST">
+
+            {% for n in range(passenger_number) %}
+            <div class="passenger-form">
+                <div class="passenger-name">Passenger {{n+1}}</div>
+                <input type="text" class="location-input" name="passenger{{n}}_location" placeholder="Enter Location...">
+            </div>
+
+            {% endfor %}
+            <input type="hidden" name="destination" value="{{destination}}">
+            <input type="hidden" name="passenger_number" value="{{passenger_number}}">
+            <button type="submit" class="submit-button">Submit All Locations</button>
+        </form>
+
+    </div>
+
+</body>
+
+</html>
