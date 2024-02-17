@@ -20,7 +20,8 @@ router.get('/', function(req, res) {
 // get_place?name="<query>"
 router.get('/get_place', async function(req, res) {
     const rQ = req.query
-    if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
+    console.log(rQ.length)
+    //if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
 
     // Call methods
     const placeInfo = await getPlaceInfo(rQ.name)
@@ -32,7 +33,7 @@ router.get('/get_place', async function(req, res) {
 // calc_distance?ogLat=<latitude>&ogLen=<longitude>&dtLat=<latitude>&dtLen=<longitude>
 router.get('/calc_distance', async function(req, res) {
     const rQ = req.query
-    if (rQ.length === undefined){return res.status(401).send(err401)}
+    //if (rQ.length === undefined){return res.status(401).send(err401)}
 
     // Separate the two points in an array
     const parseRequest = [
@@ -49,7 +50,7 @@ router.get('/calc_distance', async function(req, res) {
 // get_airport/<"n" of passengers>?latx=<latitude>&lenx=<longitude> being "x" a number
 router.get('/get_airport/:passengers', async function(req, res) {
     const rQ = req.query
-    if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
+    //if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
     const maxPeople = req.params.passengers
 
     // Define area for search for airports
@@ -70,7 +71,7 @@ router.get('/get_airport/:passengers', async function(req, res) {
 // get_flight?ogIata=<IATA Code>&dtIata=<IATA Code>&date=<YYYY-MM-DD>
 router.get('/get_flight', async function(req, res) {
     const rQ = req.query
-    if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
+    //if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
 
     // Call methods
     const flights = await getFlight(rQ.ogIata, rQ.dtIata, rQ.date)
@@ -79,7 +80,7 @@ router.get('/get_flight', async function(req, res) {
 
 router.get('/kruskal_algorithm', function(req, res) {
     const rQ = req.query
-    if (rQ.length === undefined){return res.status(401).send(err401)} //Throw 401
+    //if (rQ.length === undefined){return res.status(401).send(err401)} //Throw 401
     var matrix = rQ.matrix.replace(/["]+/g, '')
     kruskal(matrix)
 })
