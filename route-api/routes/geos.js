@@ -7,7 +7,7 @@ const { amadeus_config } = require('../config.json')
 const errJSON = { // Error message for requests
     "error": "Request could not be fulfilled!",
     "pleaseCheck": "That your fields and parameters are correct!",
-    "travel-minimiser-api": "Made by Sprinter05"
+    "nullCO2": "api_error"
 }
 
 // Geocoder API login from config.json
@@ -168,6 +168,11 @@ exports.getFlight = async function(ogIata, dtIata, date){
             }
         }
         var query = await getPrices(jsonInput)
+        // Return API error instead of node.js error
+        if(query === undefined || query.data.length === 0) {
+            console.log('[-] JSON ERROR on getPrices')
+            return errJSON
+        }
         
         // Stops after a 500 seemingly random error that blocks all next wqueries
         if (query === null) break
@@ -199,7 +204,6 @@ exports.getFlight = async function(ogIata, dtIata, date){
             "price": qC.price,
             "emissions": emissions
         }
-        console.log(fullJSON)
     }
     // Event logging
     console.log(`[+] NEW getFlight from ${ogIata} to ${dtIata} on ${date}`)

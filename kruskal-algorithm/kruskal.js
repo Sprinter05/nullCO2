@@ -1,6 +1,5 @@
 const jsgraphs = require('js-graph-algorithms');
 
-
 exports.kruskalFunc = function(distmatrix){
     var len = distmatrix.length    
     var g = new jsgraphs.WeightedGraph(len); 
@@ -22,8 +21,6 @@ exports.kruskalFunc = function(distmatrix){
             "destination": w,
             "weight": e.weight
         }
-    }    
+    }
     return jsonObjs; //esto lo devuelves a res
 }
-const res = exports.kruskalFunc([[5,3,3,7],[2,6,1,3],[4,7,8,9],[4,7,8,9]])
-console.log(res)

@@ -5,7 +5,7 @@ const fs = require('fs')
 const { cwd } = require('node:process')
 const router = Router();
 const { getPlaceInfo, getDistance, getMiddle, getAirport, getFlight } = require('./geos') // Methods from geos.js
-const { kruskal } = require('../../kruskal-algorithm/kruskal.js')
+const { kruskalFunc } = require('../../kruskal-algorithm/kruskal.js')
 const docs = `/README.md`
 
 // Error 401
@@ -79,11 +79,15 @@ router.get('/get_flight', async function(req, res) {
     res.json(flights)
 })
 
+// Returns the minimal path for a given graph
+// kruskal_algorithm?matrix=<array[[]]>
 router.get('/kruskal_algorithm', function(req, res) {
     const rQ = req.query
     //if (rQ.length === undefined){return res.status(401).send(err401)} //Throw 401
-    var matrix = rQ.matrix.replace(/["]+/g, '')
-    kruskal(matrix)
+    var matrix = rQ.matrix.replace(/'/g,"\"")
+    var sendMat = JSON.parse(matrix)
+    const resultJson = kruskalFunc(sendMat)
+    res.json(resultJson)
 })
 
 // Export all modules
