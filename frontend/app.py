@@ -1,19 +1,10 @@
 from flask import Flask, render_template, request, redirect, abort, make_response
 from utils import get_location, get_trip_data, get_airports
+from plot import create_map
+
 import json
-import babel.dates
 
 app = Flask(__name__)
-
-
-@app.template_filter() # Date filter for formatting the date
-def format_datetime(value, format='medium'):
-    if format == 'full':
-        format="EEEE, d. MMMM y 'at' HH:mm"
-    elif format == 'medium':
-        format="EE dd.MM.y HH:mm"
-    return babel.dates.format_datetime(value, format)
-
 
 @app.route("/")  # Home page, delete cookies
 def index():
@@ -110,7 +101,7 @@ def route():
         request.method == "POST"
     ):  # When a POST request is made, we start calculating the route (loading page has been rendered)
         locations = []
-        for i in range(int(request.cookies.get("passenger_number")) - 1):
+        for i in range(int(request.cookies.get("passenger_number"))):
             if not request.cookies.get(f"passenger{i}_location"):
                 abort(400)
             locations.append(get_location(request.cookies.get(f"passenger{i}_location"))) # Get a list of the locations of all passengers
@@ -122,7 +113,7 @@ def route():
                 request.cookies.get("airport_origin"),
                 request.cookies.get("airport_dest"),
                 json.loads(
-                    request.cookies.get("airport_dest_coords").replace("'", '"')
+                    request.cookies.get("airport_origin_coords").replace("'", '"')
                 ),
                 request.cookies.get("date"),
             ),
@@ -133,4 +124,4 @@ def route():
 
 @app.route("/summary", methods=["POST"])
 def summary():
-    return render_template("summary.html", flight=request.values.get("flight"))
+    return render_template("summary.html")

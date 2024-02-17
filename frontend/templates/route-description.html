@@ -63,6 +63,10 @@
             bottom: 10px;
             right: 10px;
         }
+
+        .mapcontainer {
+            display: table;
+        }
     </style>
 </head>
 
@@ -71,9 +75,13 @@
     <div class="container">
         <h1>Flight Options</h1>
 
-        <div class="route">
-            {{route}}
+        <div class="flight-option mapcontainer">
+            {{data["map"] | safe}}
         </div>
+        <div class="flight-option">
+            {{data["route"]}}
+        </div>
+        <h2>Flight options:</h2>
         <form action="/summary" method="POST">
             {% for flight in data["flight"] %}
             <div class="flight-option">

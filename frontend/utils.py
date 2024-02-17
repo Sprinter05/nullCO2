@@ -1,5 +1,6 @@
 from pprint import pprint
 import requests
+from plot import create_map
 
 # For debugging purposes
 # proxies = {
@@ -26,6 +27,7 @@ def get_distance(origin, destination):  # Get the distance between two coordinat
             "dtLat": destination["lat"],
             "dtLen": destination["len"],
         },
+        # proxies=proxies,
         timeout=100,
     )
     return a.json()["distance"]
@@ -50,12 +52,29 @@ def get_route(
     locations: list, airport: list[float, float]
 ):  # Get the optimal route between a list of coordinates and the coordinates of an airport
     loc = locations + airport
+    print(locations)
 
-    matrix = []  # distance matrix between locations
-    for i in loc:
-        for j in loc:
-            matrix.append({"source": i, "end": j, "distance": get_distance(i, j)})
-    return matrix
+    matrix = [
+        [get_distance(i, j) for j in loc] for i in loc
+    ]  # distance matrix between locations
+
+    params = {
+        "matrix": "[" + ",".join([str(i) for i in matrix]) + "]"
+    }  # Convert the matrix to a string
+
+    a = requests.get(
+        "http://127.0.0.1:3000/kruskal_algorithm",
+        params={
+            "matrix": "["
+            + ",".join([str(i) for i in matrix])
+            + "]",  # Convert the matrix to a string
+        },
+        # proxies=proxies,
+        timeout=100,
+    )
+    print(a.content)
+    print(params)
+    return a.json()
 
 
 def get_flight(
@@ -70,23 +89,37 @@ def get_flight(
         },
         timeout=100,
     )
+
     pprint(a.json())
     return list(a.json().values())
 
 
-def get_trip_data(locations, origin_iata, destination_iata, destination_coords, date):
-    if destination_iata is None or destination_coords is None:
+def get_trip_data(locations, origin_iata, destination_iata, origin_coords, date):
+    if destination_iata is None or origin_coords is None:
         return {"error": "No se encontró aeropuerto"}
     route = get_route(
         locations,
         [
             {
-                "lat": destination_coords.get("latitude"),
-                "len": destination_coords.get("longitude"),
+                "lat": origin_coords.get("latitude"),
+                "len": origin_coords.get("longitude"),
             }
         ],
     )
     flight = get_flight(
         origin_airport=origin_iata, destination_airport=destination_iata, date=date
     )
-    return {"route": route, "flight": flight}
+    return {
+        "route": route,
+        "flight": flight,
+        "map": create_map(
+            locations,
+            route,
+            [
+                {
+                    "lat": origin_coords.get("latitude"),
+                    "len": origin_coords.get("longitude"),
+                }
+            ],
+        ),
+    }
