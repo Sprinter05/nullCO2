@@ -2,7 +2,7 @@ const nodeGeocoder = require('node-geocoder')
 const geolib = require('geolib')
 const amadeusAPI = require('amadeus');
 const { quickSort, ArraytoJSON, JSONtoArray } = require('./utils');
-const errJSON = {"error": "Request could not be fulfilled"}
+const errJSON = {"0": {"error": "Request could not be fulfilled"}}
 
 var geocoder = nodeGeocoder({provider: 'openstreetmap'})
 var amadeus = new amadeusAPI({
