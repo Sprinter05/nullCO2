@@ -182,18 +182,24 @@ exports.getFlight = async function(ogIata, dtIata, date){
             emissions += qC.itineraries['0'].segments[`${j}`].co2Emissions['0'].weight
         }
 
-        // Get airline name information by code
+        // Get airline name information by code and dates
         airlineN = qC.itineraries['0'].segments['0'].carrierCode
         resolveAirlineN = await getAirline(airlineN)
+        originDate = qC.itineraries['0'].segments['0'].departure
+        departureDate = qC.itineraries['0'].segments[`${mC-1}`].arrival
+        // Replace time-date strings
+        originDate.at = originDate.at.replace("T", " ").replace(":00", "")
+        departureDate.at = departureDate.at.replace("T", " ").replace(":00", "")
 
         // Format final JSON
         fullJSON[`${i}`] = {
-            "origin": qC.itineraries['0'].segments['0'].departure.replace("T", " ").replace(":00", ""),
-            "destination": qC.itineraries['0'].segments[`${mC-1}`].arrival.replace("T", " ").replace(":00", ""),
+            "origin": originDate,
+            "destination": departureDate,
             "carrierCode": resolveAirlineN,
             "price": qC.price,
             "emissions": emissions
         }
+        console.log(fullJSON)
     }
     // Event logging
     console.log(`[+] NEW getFlight from ${ogIata} to ${dtIata} on ${date}`)
