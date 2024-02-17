@@ -1,22 +1,29 @@
 const jsgraphs = require('js-graph-algorithms');
 
 
-exports.kruskal = function(distmatrix){
-    var g = new jsgraphs.WeightedGraph(n); 
-    for(let i=0;i<distmatrix.length();i++){
-        for(let j=0;j<distmatrix.length();j++){
-            g.addEdge(i,(i+1),distmatrix[i][j]);
+exports.kruskalFunc = function(distmatrix){
+    var len = distmatrix.length    
+    var g = new jsgraphs.WeightedGraph(len); 
+    for(let i=0;i<len;i++){
+        for(let j=0;j<len;j++){
+            if (i === j) continue
+            g.addEdge(new jsgraphs.Edge(i,j,distmatrix[i][j]));
         }
     }
     var kruskal = new jsgraphs.KruskalMST(g); 
     var mst = kruskal.mst;
-    var wgt = 0;
-    for(var i=0; i < mst.length; ++i) {
-        var e = mst[i];
+    var jsonObjs = []
+    for(let i=0; i < mst.length; ++i) {
+        var e = mst[i]
         var v = e.either();
         var w = e.other(v);
-        console.log('(' + v + ', ' + w + '): ' + e.weight);
-        wgt = wgt + e.weight;
-        console.log(wgt);
-    }
+        jsonObjs[i] = {
+            "origin": v,
+            "destination": w,
+            "weight": e.weight
+        }
+    }    
+    return jsonObjs; //esto lo devuelves a res
 }
+const res = exports.kruskalFunc([[5,3,3,7],[2,6,1,3],[4,7,8,9],[4,7,8,9]])
+console.log(res)
