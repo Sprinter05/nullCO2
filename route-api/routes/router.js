@@ -79,6 +79,8 @@ router.get('/get_flight', async function(req, res) {
     res.json(flights)
 })
 
+// Returns the minimal path for a given graph
+// kruskal_algorithm?matrix=<array[[]]>
 router.get('/kruskal_algorithm', function(req, res) {
     const rQ = req.query
     //if (rQ.length === undefined){return res.status(401).send(err401)} //Throw 401
