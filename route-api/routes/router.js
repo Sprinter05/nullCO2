@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const { getPlaceInfo, getDistance, getMiddle, getAirport } = require('./geos')
+const { getPlaceInfo, getDistance, getMiddle, getAirport, getFlight } = require('./geos')
 
 router.get('/', function(req, res) {    
     res.json(
@@ -44,8 +44,10 @@ router.get('/get_airport/:passengers', async function(req, res) {
     res.json(airport)
 })
 
-router.get('/get_flight/', async function(req, res) {
+router.get('/get_flight', async function(req, res) {
     const rQ = req.query
+    const flights = await getFlight(rQ.oIata, rQ.dIata, rQ.date)
+    res.json(flights)
 })
 
 module.exports = router;

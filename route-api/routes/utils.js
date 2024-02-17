@@ -35,3 +35,19 @@ exports.quickSort = function(items, left, right) {
     }
     return items;
 }
+
+exports.JSONtoArray = function(JSON){
+    arr = []
+    for(let i=0; i<=Object.keys(JSON).length-1; i++){
+        arr[i] = JSON[`${i}`]
+    }
+    return arr
+}
+
+exports.ArraytoJSON = function(arr){
+    cJSON = {}
+    for(let i=0; i<=arr.length-1; i++){
+        cJSON[`${i}`] = arr[i]
+    }
+    return cJSON
+}

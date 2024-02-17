@@ -1,7 +1,7 @@
 const nodeGeocoder = require('node-geocoder')
 const geolib = require('geolib')
 const amadeusAPI = require('amadeus');
-const { quickSort } = require('./utils')
+const { quickSort, ArraytoJSON, JSONtoArray } = require('./utils')
 
 var geocoder = nodeGeocoder({provider: 'openstreetmap'})
 var amadeus = new amadeusAPI({
@@ -38,15 +38,12 @@ exports.getAirport = async function(lat, len){
         const maxDatum = Object.keys(airport.data).length
         const top = 3
         var indexDist = {}
-        var sortArray = []
-
+        
         for(let i=0; i<=maxDatum-1; i++){
             indexDist[`${i}`] = airport.data[`${i}`].distance.value
         }
-        for(var i=0; i<=9; i++){
-            sortArray.push(indexDist[`${i}`])
-        }
-
+        
+        var sortArray = JSONtoArray(indexDist)
         const minDists = quickSort(sortArray, 0, sortArray.length-1)
         var topIndex = []     
         for(let i=0; i<=top-1; i++){
@@ -65,10 +62,62 @@ exports.getAirport = async function(lat, len){
             outputJson[`${i}`].country = airport.data[`${topIndex[i]}`].address.countryName
             outputJson[`${i}`].coords = airport.data[`${topIndex[i]}`].geoCode
             outputJson[`${i}`].distance = airport.data[`${topIndex[i]}`].distance.value
+            outputJson[`${i}`].iata = airport.data[`${topIndex[i]}`].iataCode
         }
         
         return outputJson;
     } catch (e) {
         console.log(e)
     }
+}
+
+async function getPrices(jsonInput){
+    let retQ
+    try {
+        retQ = await amadeus.shopping.flightOffers.pricing.post(JSON.stringify(jsonInput))
+        return retQ 
+    } catch(e){
+        console.log(e)
+        return null
+    }
+}
+
+exports.getFlight = async function(ogIata, dtIata, date){
+    var flight
+    try {
+        flight = await amadeus.shopping.flightOffersSearch.get({
+            "originLocationCode": ogIata,
+            "destinationLocationCode": dtIata,
+            "departureDate": date,
+            "adults": '1'
+        })
+    } catch (e) {console.log(e)}
+    const top = 5
+    var fullJSON = {}
+
+    for(let i=0; i <= top; i++){
+        var jsonInput = {
+            'data': {
+                'type': 'flight-offers-pricing',
+                'flightOffers': [flight.data[`${i}`]]
+            }
+        }
+        var query = await getPrices(jsonInput)
+        if (query === null) break
+        const qC = query.data.flightOffers[`0`]
+        const mC = Object.keys(qC.itineraries['0'].segments).length
+        var emissions = 0
+        for(let j=0; j<=mC-1; j++){
+            emissions += qC.itineraries['0'].segments[`${j}`].co2Emissions['0'].weight
+        }
+        fullJSON[`${i}`] = {
+            "origin": qC.itineraries['0'].segments['0'].departure,
+            "destination": qC.itineraries['0'].segments[`${mC-1}`].arrival,
+            "carrierCode": qC.itineraries['0'].segments['0'].carrierCode,
+            "price": qC.price,
+            "emissions": emissions
+        }
+    }  
+    return fullJSON
+    
 }
