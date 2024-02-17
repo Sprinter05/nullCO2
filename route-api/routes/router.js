@@ -6,7 +6,7 @@ const { cwd } = require('node:process')
 const router = Router();
 const { getPlaceInfo, getDistance, getMiddle, getAirport, getFlight } = require('./geos') // Methods from geos.js
 const { kruskal } = require('../../kruskal-algorithm/kruskal.js')
-const docs = `/INSTRUCTIONS.md`
+const docs = `/README.md`
 
 // Error 401
 const err401 = "Error 401 - Bad fields buddy!" // Currently disabled
