@@ -92,6 +92,13 @@ async function getPrices(jsonInput){
     }
 }
 
+async function getAirline(cCode){
+    const airlineName = await amadeus.referenceData.airlines.get({
+        airlineCodes: cCode
+    })
+    return airlineName.data[`0`].businessName
+}
+
 exports.getFlight = async function(ogIata, dtIata, date){
     var flight
     try {
@@ -120,15 +127,17 @@ exports.getFlight = async function(ogIata, dtIata, date){
         for(let j=0; j<=mC-1; j++){
             emissions += qC.itineraries['0'].segments[`${j}`].co2Emissions['0'].weight
         }
+        airlineN = qC.itineraries['0'].segments['0'].carrierCode
+        resolveAirlineN = await getAirline(airlineN)
         fullJSON[`${i}`] = {
             "origin": qC.itineraries['0'].segments['0'].departure,
             "destination": qC.itineraries['0'].segments[`${mC-1}`].arrival,
-            "carrierCode": qC.itineraries['0'].segments['0'].carrierCode,
+            "carrierCode": resolveAirlineN,
             "price": qC.price,
             "emissions": emissions
         }
     } 
-    console.log(`[+] NEW getFlight from ${ogIata}} to ${dtIata} on ${date}`)
+    console.log(`[+] NEW getFlight from ${ogIata} to ${dtIata} on ${date}`)
     return fullJSON
     
 }
