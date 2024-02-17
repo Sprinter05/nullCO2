@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Location Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+
+        .passenger-form {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .passenger-name {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .location-input {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .submit-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -56px 0 0 -56px;
+        }
+
+        .loader:after {
+            content: " ";
+            display: block;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 1px solid;
+            border-color: #0aa13a transparent #47a90e transparent;
+            animation: ring 1.2s linear infinite;
+        }
+
+        @keyframes ring {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Passenger Location Form</h1>
+
+        <form id="passenger-location-form" method="POST">
+
+            {% for n in range(passenger_number) %}
+            <div class="passenger-form">
+                <div class="passenger-name">Passenger {{n+1}}</div>
+                <input type="text" class="location-input" name="passenger{{n}}_location"
+                    placeholder="Enter Location...">
+            </div>
+
+            {% endfor %}
+            <button type="submit" class="submit-button">Submit All Locations</button>
+        </form>
+
+    </div>
+    <div class="loader" id="spinner"></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const spinner = document.getElementById("spinner");
+            const form = document.getElementById("passenger-location-form");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission behavior
+
+                // Show spinner
+                spinner.style.display = "block";
+
+                // Serialize form data
+                const formData = new FormData(form);
+
+                // Send form data asynchronously using AJAX
+                fetch('/calculate_route', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        // Replace entire HTML content with the response data
+                        document.documentElement.innerHTML = data;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Hide spinner
+                        spinner.style.display = "none";
+                        // Handle errors or display error message
+                    });
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airport Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding-top: 100px;
+            text-align: center;
+        }
+
+        .airport-option {
+            display: inline-block;
+            margin: 20px;
+        }
+
+        .airport-option input[type="radio"] {
+            display: none;
+        }
+
+        .airport-option label {
+            display: block;
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .airport-option input[type="radio"]:checked+label {
+            background-color: #4CAF50;
+            color: #fff;
+            border-color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Airport Selection</h1>
+
+        <form action="#" method="POST">
+            {% for airport in airports.values() %}
+            <div class="airport-option">
+                <input type="radio" id="{{airport['iata']}}" name="airport" value='{{airport["iata"]}}'>
+                <label for="{{airport['iata']}}">{{airport["locationName"]}}</label>
+            </div>
+            {% endfor %}
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        #destination-input {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        #passenger-input,
+        #date-input {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        #submit-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Travel Planner</h1>
+        <form action="#" method="POST">
+            <input type="text" id="destination-input" name="destination" placeholder="Enter Destination">
+            <br>
+            <input type="number" id="passenger-input" name="passenger_number" placeholder="Number of Passengers">
+            <br>
+            <input type="date" id="date-input" name="date" placeholder="Select Date of Travel">
+            <br>
+            <button type="submit" id="submit-button">Plan Your Trip</button>
+        </form>
+    </div>
+
+</body>
+
+</html>
