@@ -20,7 +20,6 @@ router.get('/', function(req, res) {
 // get_place?name="<query>"
 router.get('/get_place', async function(req, res) {
     const rQ = req.query
-    console.log(rQ.length)
     //if (rQ.length === undefined){return res.status(401).send(err401)} // Throw 401
 
     // Call methods
