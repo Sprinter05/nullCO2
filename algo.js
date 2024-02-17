@@ -1,7 +1,8 @@
+//TODO Importar los datos de la API de samuel (distancias y contaminación)
 var jsgraphs = require('js-graph-algorithms');
 var contamin = 30;
 const dist = [1,2,3,4,5,6,7,8,9,10];
-var g = new jsgraphs.WeightedGraph(10); // 10 is the number vertices in the graph
+var g = new jsgraphs.WeightedGraph(6); // 10 is the number vertices in the graph
 g.addEdge(new jsgraphs.Edge(0, 1,contamin*dist[0])); // add undirected edge connecting vertex 0 to vertex 5
 g.addEdge(new jsgraphs.Edge(0, 2,contamin*dist[1]));
 g.addEdge(new jsgraphs.Edge(0, 3,contamin*dist[2]));
