@@ -1,8 +1,18 @@
 from flask import Flask, render_template, request, redirect, abort, make_response
 from utils import get_location, get_trip_data, get_airports
 import json
+import babel.dates
 
 app = Flask(__name__)
+
+
+@app.template_filter() # Date filter for formatting the date
+def format_datetime(value, format='medium'):
+    if format == 'full':
+        format="EEEE, d. MMMM y 'at' HH:mm"
+    elif format == 'medium':
+        format="EE dd.MM.y HH:mm"
+    return babel.dates.format_datetime(value, format)
 
 
 @app.route("/")  # Home page, delete cookies
@@ -53,7 +63,6 @@ def airport_select():
 
 @app.route("/passengers", methods=["POST", "GET"])
 def passenger_locations():  # Get location of each member for calculating the optimal route
-    print(request.cookies.get("passenger_number"), "-------------------")
     if request.method == "POST":
         resp = make_response(redirect("/airport-origin-select"))
         for i in range(
@@ -61,7 +70,6 @@ def passenger_locations():  # Get location of each member for calculating the op
         ):  # Check if all passengers have a location defined
             if not request.values.get(f"passenger{i}_location"):
                 return redirect("/passengers")  # If not, redirect to the same page
-            print("YEEEEAHHH BAABY")
             resp.set_cookie(
                 f"passenger{i}_location", request.values.get(f"passenger{i}_location")
             )
@@ -102,14 +110,16 @@ def route():
         request.method == "POST"
     ):  # When a POST request is made, we start calculating the route (loading page has been rendered)
         locations = []
-        for i in range(int(request.cookies.get("passenger_number"))):
-            if not request.values.get(f"passenger{i}_location"):
+        for i in range(int(request.cookies.get("passenger_number")) - 1):
+            if not request.cookies.get(f"passenger{i}_location"):
                 abort(400)
-            locations.append(get_location(request.values.get(f"passenger{i}_location")))
+            locations.append(get_location(request.cookies.get(f"passenger{i}_location"))) # Get a list of the locations of all passengers
+        
         return render_template(
             "route-description.html",
             data=get_trip_data(
                 locations,
+                request.cookies.get("airport_origin"),
                 request.cookies.get("airport_dest"),
                 json.loads(
                     request.cookies.get("airport_dest_coords").replace("'", '"')
