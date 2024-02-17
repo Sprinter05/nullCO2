@@ -15,7 +15,7 @@ exports.getPlaceInfo = async function(origin){
     try {
         result = await geocoder.geocode(origin)
     } catch(e) {console.log('[-] ERROR on getPlaceInfo' + '\n' + e)}
-    if (result.length === 0) return errJSON
+    if (result === undefined) return errJSON
     const jsonOutput = {
         "lat": `${result[0].latitude}`,
         "lon": `${result[0].longitude}`,
@@ -46,8 +46,8 @@ exports.getAirport = async function(lat, len){
         airport = await amadeus.referenceData.locations.airports.get({longitude: len, latitude: lat})
     } catch (e) { {console.log('[-] ERROR on getAirport' + '\n' + e)} }
 
+    if (airport === undefined) return errJSON
     const maxDatum = Object.keys(airport.data).length
-    if (maxDatum === 0) return errJSON
     const top = 3
     var indexDist = {}
         
