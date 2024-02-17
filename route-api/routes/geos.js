@@ -112,6 +112,8 @@ exports.getFlight = async function(ogIata, dtIata, date){
     const top = 5
     var fullJSON = {}
 
+    if(flight === undefined || flight.data.length === 0) return errJSON
+
     for(let i=0; i <= top; i++){
         var jsonInput = {
             'data': {
