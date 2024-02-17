@@ -199,7 +199,6 @@ exports.getFlight = async function(ogIata, dtIata, date){
             "price": qC.price,
             "emissions": emissions
         }
-        console.log(fullJSON)
     }
     // Event logging
     console.log(`[+] NEW getFlight from ${ogIata} to ${dtIata} on ${date}`)
