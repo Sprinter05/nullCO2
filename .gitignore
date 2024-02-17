@@ -1,1 +1,3 @@
+# API .gitignore
 route-api/node_modules
+route-api/config.json
