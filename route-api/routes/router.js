@@ -2,6 +2,7 @@
 const { Router } = require('express');
 const router = Router();
 const { getPlaceInfo, getDistance, getMiddle, getAirport, getFlight } = require('./geos') // Methods from geos.js
+const { kruskal } = require('../../kruskal-algorithm/kruskal.js')
 
 // API Root -> Future documentation
 router.get('/', function(req, res) {    
@@ -72,6 +73,12 @@ router.get('/get_flight', async function(req, res) {
     // Call methods
     const flights = await getFlight(rQ.ogIata, rQ.dtIata, rQ.date)
     res.json(flights)
+})
+
+router.get('/kruskal_algorithm', function(req, res) {
+    const rQ = req.query
+    var matrix = rQ.matrix.replace(/["]+/g, '')
+    kruskal()
 })
 
 // Export all modules
