@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recommended Route</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 50px;
+    }
+    .route-section {
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .route-title {
+        font-weight: bold;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    .route-description {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Recommended Route</h1>
+    
+    <div class="route-section">
+        <div class="route-title">Route Overview</div>
+        <div>
+            <!-- Best route -->
+            Best route: {{route}}
+        </div>
+        <div class="airport-description">
+            <!-- Recommended airport-->
+            Recommended airport: {{airport}}
+        </div>
+    </div>    
+</div>
+
+</body>
+</html>

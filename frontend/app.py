@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, abort
-from utils import get_location, get_route
+from utils import get_location, get_route, get_airport
 
 app = Flask(__name__)
 
@@ -26,10 +26,8 @@ def passenger_locations():  # Get location of each member
             passenger_number=int(request.values.get("passenger_number")),
             destination=request.values.get("destination"),
         )
-    elif request.method == "POST":
-        return redirect("/first")
     else:
-        pass
+        return redirect("/start")
 
 
 @app.route("/calculate_route", methods=["POST", "GET"])
@@ -45,4 +43,4 @@ def route():
                 print(f"passenger{i}")
                 abort(400)
             locations.append(get_location(request.values.get(f"passenger{i}_location")))
-    return get_route(locations)
+        return render_template("route-description.html", route=get_route(locations), airport=get_airport(locations)["0"])

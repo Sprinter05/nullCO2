@@ -1,5 +1,9 @@
 import requests
 
+proxies = {
+   'http': 'http://localhost:8080',
+}
+
 
 def get_location(loc: str):
     a = requests.get(
@@ -9,7 +13,6 @@ def get_location(loc: str):
 
 
 def get_distance(origin, destination):
-    print(origin)
     a = requests.get(
         "http://127.0.0.1:3000/calc_distance",
         params={
@@ -23,6 +26,20 @@ def get_distance(origin, destination):
     return a.json()["distance"]
 
 
+def get_airport(locations):
+    locs = {}
+    for i, l in enumerate(locations):
+        locs[f"lat{i+1}"] = f"{l['lat']}"
+        locs[f"len{i+1}"] = f"{l['lon']}"
+
+    a = requests.get(
+        f"http://127.0.0.1:3000/get_airport/{len(locations)}", params=locs, timeout=100, proxies=proxies
+    )
+    return a.json()
+
+
 def get_route(locations: list):
-    matrix = [[get_distance(i, j) for j in locations] for i in locations] # distance matrix between locations
+    matrix = [
+        [get_distance(i, j) for j in locations] for i in locations
+    ]  # distance matrix between locations
     return matrix
