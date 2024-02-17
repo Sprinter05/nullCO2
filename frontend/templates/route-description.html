@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recommended flight options</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,8 +16,10 @@
             margin: 0;
             padding: 0;
         }
-
+        
         .container {
+            font-family: "Rubik", sans-serif;
+            font-optical-sizing: auto;
             width: 80%;
             margin: 0 auto;
             padding-top: 50px;
@@ -25,6 +31,13 @@
             padding: 20px;
             margin-bottom: 20px;
             position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .flight-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
         }
 
         .carbon-emissions {
@@ -61,8 +74,7 @@
         <div class="route">
             {{route}}
         </div>
-        <!-- Flight Option 1 -->
-        <form action="/chipichipchapachapa" method="POST">
+        <form action="/summary" method="POST">
             {% for flight in data["flight"] %}
             <div class="flight-option">
                 <div class="carbon-emissions">
@@ -70,10 +82,12 @@
                     <span>{{flight["emissions"]}} kg CO2</span>
                 </div>
                 <!-- Flight details -->
-                <h2>{{flight["origin"]["iataCode"]}} - {{flight["destination"]["iataCode"]}} {{flight["origin"]["at"][10:]}}
+                <h2>{{flight["origin"]["iataCode"]}} - {{flight["destination"]["iataCode"]}}
+                    {{flight["origin"]["at"][10:]}}
                 </h2>
                 <h3>{{flight["carrierCode"]}}</h3>
                 <p>Price: {{flight["price"]["total"]}}{{flight["price"]["currency"]}}</p>
+                <input type="hidden" name="flight" value=''>
                 <input type="submit" value="Select" class="choose-button">
             </div>
             {% endfor %}

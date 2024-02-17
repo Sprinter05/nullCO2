@@ -129,3 +129,8 @@ def route():
         )
     else:  # As the API call is quite slow, we render a loading page while the data is being fetched
         return render_template("loading.html")
+
+
+@app.route("/summary", methods=["POST"])
+def summary():
+    return render_template("summary.html", flight=request.values.get("flight"))

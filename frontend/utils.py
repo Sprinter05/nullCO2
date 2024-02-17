@@ -13,7 +13,6 @@ def get_location(loc: str):  # Get the coordinates of a location string
         timeout=100,
         proxies=proxies,
     )
-    print(a.content)
     return a.json()
 
 
