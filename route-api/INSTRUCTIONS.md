@@ -6,3 +6,23 @@ This API's purpose is to give the **Web frontend** an easier time retrieving val
 - [`node-geocoder`](https://github.com/nchaulet/node-geocoder) allows us to query any search about a location and get its coordinates.
 - [`geo-lib`](https://github.com/manuelbieh/geolib) is the tool we use to calculate distances between two points in the real world, it's only 2D but we didn't feel like finding a library that supported 3D calculations would really prove worthy for this project.
 - [`amadeus-node`](https://github.com/amadeus4dev/amadeus-node), yet another really useful tool that helped us retrieve values for nearby airports, upcoming flights, flight CO2 emissions.
+## API Functions
+- `get_place?name=<string>`
+    - name -> Query you want to search for
+- `calc_distance?ogLat=<int>&ogLen=<int>&dtLat=<int>&dtLen=<int>`
+    - ogLat -> Latitude for the original point
+    - ogLen -> Longitude for the original point
+    - dtLat -> Latitude for the destination point
+    - dtLen -> Longitude for the destination point
+- `get_airport/<passengersInt>/?latx=<int>&lenx=<int>`
+    - passengersInt -> Amount of passengers to designate the search area
+    - latx -> Latitude for each one of the passengers numerated starting at 1
+    - lenx -> Longitude for each one of the passengers numerated starting at 1
+- `get_flight?ogIata=<string>&dtIata=<string>&date=<string>`
+    - ogIata -> IATA code of the origin airport
+    - dtIata -> IATA code of the destination airport
+    - date -> Date for the flight, must be in `YYYY-MM-DD`
+- `kruskal_algorithm?matrix=<array[[]]>`
+    - matrix -> Array consisting of arrays to calculate the minimal path for the airport using [Kruskal's algorithm](https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)
+
+Made by Sprinter05
