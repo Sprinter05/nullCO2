@@ -1,19 +1,21 @@
 // Create new Router for HTTPS requests
 const { Router } = require('express');
+const marked = require('marked')
+const fs = require('fs')
+const { cwd } = require('node:process')
 const router = Router();
 const { getPlaceInfo, getDistance, getMiddle, getAirport, getFlight } = require('./geos') // Methods from geos.js
 const { kruskal } = require('../../kruskal-algorithm/kruskal.js')
+const docs = `/INSTRUCTIONS.md`
 
 // Error 401
-const err401 = "Error 401 - Bad fields buddy!"
+const err401 = "Error 401 - Bad fields buddy!" // Currently disabled
 
 // API Root -> Future documentation
 router.get('/', function(req, res) {    
-    res.json(
-        {
-            "travel-minimiser": "RESTful API"
-        }
-    );
+    var path = cwd() + docs
+    var file = fs.readFileSync(path, 'utf-8')
+    res.send(marked.marked(file.toString()))
 })
 
 // Returns name of queried search
