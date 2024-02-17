@@ -2,7 +2,7 @@ const nodeGeocoder = require('node-geocoder')
 const geolib = require('geolib')
 const amadeusAPI = require('amadeus');
 const { quickSort, ArraytoJSON, JSONtoArray } = require('./utils');
-const errJSON = {"0": {"error": "Request could not be fulfilled"}}
+const errJSON = {"error": "Request could not be fulfilled"}
 
 var geocoder = nodeGeocoder({provider: 'openstreetmap'})
 var amadeus = new amadeusAPI({
@@ -15,6 +15,7 @@ exports.getPlaceInfo = async function(origin){
     try {
         result = await geocoder.geocode(origin)
     } catch(e) {console.log('[-] ERROR on getPlaceInfo' + '\n' + e)}
+    if (result.length === 0) return errJSON
     const jsonOutput = {
         "lat": `${result[0].latitude}`,
         "lon": `${result[0].longitude}`,
