@@ -16,6 +16,7 @@ exports.getPlaceInfo = async function(origin){
         "lon": `${result[0].longitude}`,
         "loc": `${result[0].formattedAddress}`
     }
+    console.log(`[+] NEW getPlaceInfo for ${origin}`)
     return jsonOutput
 }
 
@@ -24,51 +25,54 @@ exports.getDistance = async function(og, dt){
         { latitude: og.lat, longitude: og.len },
         { latitude: dt.lat, longitude: dt.len }
     )
+    console.log(`[+] NEW getDistance for ${og}, ${dt}`)
     return distMeters
 }
 
 exports.getMiddle = function(points){
     const midPoint = geolib.getCenter(points)
+    console.log(`[+] NEW getMiddle for n=${points.length} size`)
     return midPoint
 }
 
 exports.getAirport = async function(lat, len){
+    var airport
     try {
-        const airport = await amadeus.referenceData.locations.airports.get({longitude: len, latitude: lat})
-        const maxDatum = Object.keys(airport.data).length
-        const top = 3
-        var indexDist = {}
+        airport = await amadeus.referenceData.locations.airports.get({longitude: len, latitude: lat})
+    } catch (e) { console.log(e) }
+
+    const maxDatum = Object.keys(airport.data).length
+    const top = 3
+    var indexDist = {}
         
-        for(let i=0; i<=maxDatum-1; i++){
-            indexDist[`${i}`] = airport.data[`${i}`].distance.value
-        }
+    for(let i=0; i<=maxDatum-1; i++){
+        indexDist[`${i}`] = airport.data[`${i}`].distance.value
+    }
         
-        var sortArray = JSONtoArray(indexDist)
-        const minDists = quickSort(sortArray, 0, sortArray.length-1)
-        var topIndex = []     
-        for(let i=0; i<=top-1; i++){
-            for (let j=0; j<=maxDatum-1; j++){
-                if (indexDist[`${j}`] === minDists[i]){
-                    topIndex.push(j)
-                }
+    var sortArray = JSONtoArray(indexDist)
+    const minDists = quickSort(sortArray, 0, sortArray.length-1)
+    var topIndex = []     
+    for(let i=0; i<=top-1; i++){
+        for (let j=0; j<=maxDatum-1; j++){
+            if (indexDist[`${j}`] === minDists[i]){
+                topIndex.push(j)
             }
         }
-
-        outputJson = {}
-        for(let i=0; i<=top-1; i++){
-            outputJson[`${i}`] = {}
-            outputJson[`${i}`].locationName = airport.data[`${topIndex[i]}`].name
-            outputJson[`${i}`].city = airport.data[`${topIndex[i]}`].address.cityName
-            outputJson[`${i}`].country = airport.data[`${topIndex[i]}`].address.countryName
-            outputJson[`${i}`].coords = airport.data[`${topIndex[i]}`].geoCode
-            outputJson[`${i}`].distance = airport.data[`${topIndex[i]}`].distance.value
-            outputJson[`${i}`].iata = airport.data[`${topIndex[i]}`].iataCode
-        }
-        
-        return outputJson;
-    } catch (e) {
-        console.log(e)
     }
+
+    outputJson = {}
+    for(let i=0; i<=top-1; i++){
+        outputJson[`${i}`] = {}
+        outputJson[`${i}`].locationName = airport.data[`${topIndex[i]}`].name
+        outputJson[`${i}`].city = airport.data[`${topIndex[i]}`].address.cityName
+        outputJson[`${i}`].country = airport.data[`${topIndex[i]}`].address.countryName
+        outputJson[`${i}`].coords = airport.data[`${topIndex[i]}`].geoCode
+        outputJson[`${i}`].distance = airport.data[`${topIndex[i]}`].distance.value
+        outputJson[`${i}`].iata = airport.data[`${topIndex[i]}`].iataCode
+    }
+        
+    console.log(`[+] NEW getAirport for ${lat}, ${len}`)
+    return outputJson;
 }
 
 async function getPrices(jsonInput){
@@ -117,7 +121,8 @@ exports.getFlight = async function(ogIata, dtIata, date){
             "price": qC.price,
             "emissions": emissions
         }
-    }  
+    } 
+    console.log(`[+] NEW getFlight from ${ogIata}} to ${dtIata} on ${date}`)
     return fullJSON
     
 }
