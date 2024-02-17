@@ -74,6 +74,7 @@
             100% {
                 transform: rotate(360deg);
             }
+        }
     </style>
 </head>
 
@@ -82,7 +83,7 @@
     <div class="container">
         <h1>Passenger Location Form</h1>
 
-        <form id="passenger-location-form" method="POST">
+        <form id="passenger-location-form" method="POST" action="#">
 
             {% for n in range(passenger_number) %}
             <div class="passenger-form">
@@ -96,42 +97,6 @@
         </form>
 
     </div>
-    <div class="loader" id="spinner"></div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const spinner = document.getElementById("spinner");
-            const form = document.getElementById("passenger-location-form");
-
-            form.addEventListener("submit", function (event) {
-                event.preventDefault(); // Prevent default form submission behavior
-
-                // Show spinner
-                spinner.style.display = "block";
-
-                // Serialize form data
-                const formData = new FormData(form);
-
-                // Send form data asynchronously using AJAX
-                fetch('/calculate_route', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.text())
-                    .then(data => {
-                        // Replace entire HTML content with the response data
-                        document.documentElement.innerHTML = data;
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Hide spinner
-                        spinner.style.display = "none";
-                        // Handle errors or display error message
-                    });
-            });
-        });
-
-    </script>
-
 </body>
 
 </html>
