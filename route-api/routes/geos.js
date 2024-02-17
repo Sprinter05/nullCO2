@@ -1,7 +1,9 @@
 const nodeGeocoder = require('node-geocoder')
 const geolib = require('geolib')
 const amadeusAPI = require('amadeus');
-const { quickSort, ArraytoJSON, JSONtoArray } = require('./utils')
+const { quickSort, ArraytoJSON, JSONtoArray } = require('./utils');
+const { json } = require('body-parser');
+const { docs } = require('googleapis/build/src/apis/docs');
 
 var geocoder = nodeGeocoder({provider: 'openstreetmap'})
 var amadeus = new amadeusAPI({
@@ -17,6 +19,9 @@ exports.getPlaceInfo = async function(origin){
         "loc": `${result[0].formattedAddress}`
     }
     console.log(`[+] NEW getPlaceInfo for ${origin}`)
+    if(jsonOutput === undefined || jsonOutput === null){
+        console.log(`[-] UNDEFINED on getPlaceInfo`)
+    }
     return jsonOutput
 }
 
@@ -26,12 +31,18 @@ exports.getDistance = async function(og, dt){
         { latitude: dt.lat, longitude: dt.len }
     )
     console.log(`[+] NEW getDistance for ${og}, ${dt}`)
+    if(distMeters === undefined || distMeters === null){
+        console.log(`[-] UNDEFINED on getDistance`)
+    }
     return distMeters
 }
 
 exports.getMiddle = function(points){
     const midPoint = geolib.getCenter(points)
     console.log(`[+] NEW getMiddle for n=${points.length} size`)
+    if(midPoint === undefined || midPoint === null){
+        console.log(`[-] UNDEFINED on getMiddle`)
+    }
     return midPoint
 }
 
@@ -72,6 +83,9 @@ exports.getAirport = async function(lat, len){
     }
         
     console.log(`[+] NEW getAirport for ${lat}, ${len}`)
+    if(outputJson === undefined || outputJson === null){
+        console.log(`[-] UNDEFINED on getAirport`)
+    }
     return outputJson;
 }
 
@@ -123,6 +137,9 @@ exports.getFlight = async function(ogIata, dtIata, date){
         }
     } 
     console.log(`[+] NEW getFlight from ${ogIata}} to ${dtIata} on ${date}`)
+    if(fullJSON === undefined || fullJSON === null){
+        console.log(`[-] UNDEFINED on getFlight`)
+    }
     return fullJSON
     
 }
