@@ -34,14 +34,18 @@ router.get('/get_airport/:passengers', async function(req, res) {
     const rQ = req.query
     const maxPeople = req.params.passengers
     var boundingBox = []
-    for (var i=0; i<=maxPeople-1; i++){
+    for (let i=0; i<=maxPeople-1; i++){
         boundingBox[i] = {}
         boundingBox[i].latitude = rQ[`lat${i+1}`]
         boundingBox[i].longitude = rQ[`len${i+1}`]
     }
-    midpoint = await getMiddle(boundingBox)
+    midpoint = getMiddle(boundingBox)
     airport = await getAirport(midpoint.latitude, midpoint.longitude)
     res.json(airport)
+})
+
+router.get('/get_flight/', async function(req, res) {
+    const rQ = req.query
 })
 
 module.exports = router;
