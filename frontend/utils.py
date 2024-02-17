@@ -1,7 +1,7 @@
 import requests
 
 proxies = {
-   'http': 'http://localhost:8080',
+#    'http': 'http://localhost:8080',
 }
 
 
@@ -38,8 +38,9 @@ def get_airport(locations):
     return a.json()
 
 
-def get_route(locations: list):
+def get_route(locations: list, airport: list[float, float]):
+    loc = locations + airport
     matrix = [
-        [get_distance(i, j) for j in locations] for i in locations
+        [get_distance(i, j) for j in loc] for i in loc
     ]  # distance matrix between locations
     return matrix

@@ -43,4 +43,17 @@ def route():
                 print(f"passenger{i}")
                 abort(400)
             locations.append(get_location(request.values.get(f"passenger{i}_location")))
-        return render_template("route-description.html", route=get_route(locations), airport=get_airport(locations)["0"])
+        airport = get_airport(locations)["0"]
+        return render_template(
+            "route-description.html",
+            route=get_route(
+                locations,
+                airport=[
+                    {
+                        "lat": airport["coords"]["latitude"],
+                        "lon": airport["coords"]["longitude"],
+                    }
+                ],
+            ),
+            airport=airport,
+        )
