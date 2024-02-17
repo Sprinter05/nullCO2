@@ -7,12 +7,54 @@
 </head>
 
 <body>
-    <div class="loader"></div>
+    <div class="loader" id="spinner"></div>
 </body>
 
 </html>
 <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 50px;
+    }
+
+    .passenger-form {
+        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .passenger-name {
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .location-input {
+        width: 60%;
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .submit-button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
     .loader {
+        display: none;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -38,6 +80,37 @@
         100% {
             transform: rotate(360deg);
         }
-    }
 </style>
-<script> window.location.replace('/response?passenger_number={{passenger_number}}&destination={{destination}}'); </script> 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const spinner = document.getElementById("spinner");
+        const form = document.getElementById("passenger-location-form");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission behavior
+
+            // Show spinner
+            spinner.style.display = "block";
+
+            // Serialize form data
+            const formData = new FormData(form);
+
+            // Send form data asynchronously using AJAX
+            fetch('/calculate_route', {
+                method: 'POST',
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Replace entire HTML content with the response data
+                    document.documentElement.innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Hide spinner
+                    spinner.style.display = "none";
+                    // Handle errors or display error message
+                });
+        });
+    });
+
+</script>
