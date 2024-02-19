@@ -40,7 +40,7 @@ def create_map(locations, route, airport_coords):
         m.plot(xpt, ypt, "bo", markersize=1)
         plt.annotate(loc['loc'], (xpt, ypt), textcoords="offset points", xytext=(5,5), ha='center')  # Adjust xytext for label position
     xpt, ypt = m(float(airport_coords[0]["len"]), float(airport_coords[0]["lat"]))
-    m.plot(xpt, ypt, "go", markersize=10)
+    m.plot(xpt, ypt, "go")
 
     # print(loca)
     # for line in route:
@@ -55,7 +55,7 @@ def create_map(locations, route, airport_coords):
     #     print(x_values)
 
 
-    plt.legend()
+    # plt.legend()
     # plt.show()
     # Set the limits for the plot to zoom in on the area with data points
     plt.xlim(1000)

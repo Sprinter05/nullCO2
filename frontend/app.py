@@ -47,7 +47,7 @@ def airport_select():
         return resp  # Set the airport cookie and redirect to the next page
     return render_template(
         "airport-select.html",
-        point="origin",
+        point="destination",
         airports=get_airports([get_location(request.cookies.get("destination"))]),
     )
 
@@ -85,7 +85,7 @@ def airport_dest_select():
         return resp  # Set the airport cookie and redirect to the next page
     return render_template(
         "airport-select.html",
-        point="destination",
+        point="origin",
         airports=get_airports(
             [
                 get_location(request.cookies.get(f"passenger{location}_location"))
