@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +20,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .container {
             font-family: "Rubik", sans-serif;
             font-optical-sizing: auto;
@@ -65,7 +69,8 @@
         }
 
         .mapcontainer {
-            display: table;
+            height: 400px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -75,8 +80,7 @@
     <div class="container">
         <h1>Flight Options</h1>
 
-        <div class="flight-option mapcontainer">
-            {{data["map"] | safe}}
+        <div class="flight-option mapcontainer" id="map">
         </div>
         <div class="flight-option">
             {{data["route"]}}
@@ -101,7 +105,34 @@
             {% endfor %}
         </form>
     </div>
+    <script>
+        var greenIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+        var markerArray = [];
 
+
+        var map = L.map('map').fitWorld();
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        markerArray.push(L.marker([{{ data["main_airport_coords"]['lat'] }}, {{ data["main_airport_coords"]['len'] }}], { icon: greenIcon }).addTo(map)
+            .bindPopup('Origin airport'));
+        {% for loc in data["locations"] %}
+        markerArray.push(L.marker([{{ loc["lat"] }}, {{ loc["len"] }}]).addTo(map)
+            .bindPopup('{{loc["loc"]}}'));
+        {% endfor %}
+        var group = L.featureGroup(markerArray).addTo(map);
+        map.fitBounds(group.getBounds());
+    </script>
+    <empty>
+        {{data}}
+    </empty>
 </body>
 
 </html>

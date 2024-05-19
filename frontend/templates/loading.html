@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Loading... | NullCO2</title>
-
-
 </head>
 
 <body>
@@ -86,7 +84,7 @@
     }
 </style>
 <script>
-    const done = new Event("done");
+    const done = new Event("done"); // TODO: not working. Fix required for leaflet map to load
     document.addEventListener("DOMContentLoaded", function () {
         const spinner = document.getElementById("spinner");
         const form = document.getElementById("passenger-location-form");
