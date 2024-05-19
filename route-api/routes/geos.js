@@ -11,7 +11,7 @@ const errJSON = { // Error message for requests
 }
 
 // Geocoder API login from config.json
-var geocoder = nodeGeocoder({provider: 'openstreetmap'})
+var geocoder = nodeGeocoder({provider: 'openstreetmap', timeout: 999999})
 var amadeus = new amadeusAPI({
     clientId: amadeus_config.id,
     clientSecret: amadeus_config.secret
@@ -20,14 +20,18 @@ var amadeus = new amadeusAPI({
 // Returns longitude, latitude and full name of a specified query
 // `query` -> Query for the search
 exports.getPlaceInfo = async function(query){
-    var result
-    try {
-        result = await geocoder.geocode(query)
-    } catch(e) {console.log('[-] ERROR on getPlaceInfo' + '\n' + e)}
-    // Return API error instead of node.js error
-    if (result === undefined || result.length === 0) {
-        console.log('[-] JSON ERROR on getPlaceInfo')
-        return errJSON
+    while (true){
+        var result
+        try {
+            result = await geocoder.geocode(query)
+        } catch(e) {}
+        // Return API error instead of node.js error
+        if (!(result === undefined || result.length === 0)) {
+            break
+        }
+        // wait to avoid API rate limit
+        await new Promise(resolve => setTimeout(resolve, 100))
+	console.log("error fetching, retrying")
     }
     const jsonOutput = {
         "lat": `${result[0].latitude}`,
