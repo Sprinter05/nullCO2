@@ -33,7 +33,6 @@ def create_map(locations, route, airport_coords):
     m.drawmeridians(meridians, labels=[True, False, False, True])
     # plot blue dot on Boulder, colorado and label it as such.
     loca=locations + airport_coords
-    print(loca)
 
     for loc in locations:
         xpt, ypt = m(float(loc["len"]), float(loc["lat"]))

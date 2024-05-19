@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Loading... | NullCO2</title>
+
+
 </head>
 
 <body>
@@ -14,6 +16,7 @@
 <style>
     body {
         font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
         margin: 0;
         padding: 0;
     }
@@ -83,6 +86,7 @@
     }
 </style>
 <script>
+    const done = new Event("done");
     document.addEventListener("DOMContentLoaded", function () {
         const spinner = document.getElementById("spinner");
         const form = document.getElementById("passenger-location-form");
@@ -92,6 +96,7 @@
             .then(response => response.text())
             .then(data => {
                 document.documentElement.innerHTML = data;
+                document.dispatchEvent(done);
             })
             .catch(error => {
                 console.error('Error:', error);

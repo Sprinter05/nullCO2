@@ -1,6 +1,4 @@
-from pprint import pprint
 import requests
-from plot import create_map
 
 # For debugging purposes
 # proxies = {
@@ -52,7 +50,6 @@ def get_route(
     locations: list, airport: list[float, float]
 ):  # Get the optimal route between a list of coordinates and the coordinates of an airport
     loc = locations + airport
-    print(locations)
 
     matrix = [
         [get_distance(i, j) for j in loc] for i in loc
@@ -72,8 +69,6 @@ def get_route(
         # proxies=proxies,
         timeout=100,
     )
-    print(a.content)
-    print(params)
     return a.json()
 
 
@@ -90,7 +85,6 @@ def get_flight(
         timeout=100,
     )
 
-    pprint(a.json())
     return list(a.json().values())
 
 
@@ -112,14 +106,19 @@ def get_trip_data(locations, origin_iata, destination_iata, origin_coords, date)
     return {
         "route": route,
         "flight": flight,
-        "map": create_map(
-            locations,
-            route,
-            [
-                {
-                    "lat": origin_coords.get("latitude"),
-                    "len": origin_coords.get("longitude"),
-                }
-            ],
-        ),
+        "main_airport_coords": {
+            "lat": origin_coords.get("latitude"),
+            "len": origin_coords.get("longitude"),
+        },
+        "locations": locations,
+        # "map": create_map(
+        #     locations,
+        #     route,
+        #     [
+        #         {
+        #             "lat": origin_coords.get("latitude"),
+        #             "len": origin_coords.get("longitude"),
+        #         }
+        #     ],
+        # ),
     }

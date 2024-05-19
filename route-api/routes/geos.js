@@ -172,14 +172,16 @@ exports.getFlight = async function(ogIata, dtIata, date){
             }
         }
         var query = await getPrices(jsonInput)
+        // Stops after a 500 seemingly random error that blocks all next wqueries
+        if (query === null) break
+
         // Return API error instead of node.js error
+	
         if(query === undefined || query.data.length === 0) {
             console.log('[-] JSON ERROR on getPrices')
             return errJSON
         }
         
-        // Stops after a 500 seemingly random error that blocks all next wqueries
-        if (query === null) break
         
         // Abbreviations to avoid long as hell names
         const qC = query.data.flightOffers[`0`]

@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, abort, make_response
 from utils import get_location, get_trip_data, get_airports
-from plot import create_map
 
 import json
 
@@ -98,7 +97,7 @@ def airport_dest_select():
 @app.route("/calculate_route", methods=["POST", "GET"])
 def route():
     if (
-        request.method == "POST"
+        request.method == "POST" or True # TODO: Must repair the loading page, broken when adding the leaflet map
     ):  # When a POST request is made, we start calculating the route (loading page has been rendered)
         locations = []
         for i in range(int(request.cookies.get("passenger_number"))):
