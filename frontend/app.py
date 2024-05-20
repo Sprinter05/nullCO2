@@ -105,9 +105,7 @@ def route():
                 abort(400)
             locations.append(get_location(request.cookies.get(f"passenger{i}_location"))) # Get a list of the locations of all passengers
         
-        return render_template(
-            "route-description.html",
-            data=get_trip_data(
+        data = get_trip_data(
                 locations,
                 request.cookies.get("airport_origin"),
                 request.cookies.get("airport_dest"),
@@ -115,7 +113,13 @@ def route():
                     request.cookies.get("airport_origin_coords").replace("'", '"')
                 ),
                 request.cookies.get("date"),
-            ),
+            )
+        if "api_error" in data["flight"]:
+            return abort(500, "Could not get data. The Amadeus API returned error!")
+
+        return render_template(
+            "route-description.html",
+            data=data,
         )
     else:  # As the API call is quite slow, we render a loading page while the data is being fetched
         return render_template("loading.html")
